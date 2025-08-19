@@ -15,7 +15,7 @@
             height: 100vh;
             margin: 0;
             user-select: none;
-            /* A rolagem agora é controlada pelo container */
+            overflow: hidden; /* Mantém a tela sem rolagem externa */
         }
 
         .score-container {
@@ -27,7 +27,7 @@
             background-color: #000;
             padding: 10px;
             border-radius: 10px;
-            overflow-y: auto; /* Adiciona a rolagem vertical quando o conteúdo excede a tela */
+            overflow-y: auto;
         }
 
         .player-names {
@@ -183,6 +183,24 @@
             width: 24px;
             height: 24px;
         }
+        
+        /* Mensagem de rotação para mobile */
+        .orientation-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .orientation-message svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
 
         /* Estilos para telas menores (smartphones) */
         @media (max-width: 768px) {
@@ -209,9 +227,9 @@
             }
 
             .score-box {
-                flex-basis: 45%; /* Ajusta o tamanho dos botões para 2 por linha */
+                flex-basis: 45%;
                 margin: 5px;
-                height: 100px; /* Altura fixa para consistência */
+                height: 100px;
             }
             
             .label {
@@ -229,6 +247,16 @@
             .timer-display {
                 font-size: 4em;
                 margin: 10px 0;
+            }
+        }
+        
+        /* Esconde o placar e mostra a mensagem em modo retrato */
+        @media (orientation: portrait) {
+            .score-container {
+                display: none;
+            }
+            .orientation-message {
+                display: flex;
             }
         }
     </style>
@@ -335,6 +363,11 @@
             </div>
         </div>
     </div>
+    
+    <div class="orientation-message">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21a9 9 0 1 0-9-9c0 1.25.3 2.45.85 3.52L6 12l-3.15 6.13a.5.5 0 0 0 .54.67L6.8 12.55 12 21z"/></svg>
+        <p>Por favor, gire seu dispositivo para a posição horizontal.</p>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -426,6 +459,7 @@
             startStopButton.addEventListener('click', () => {
                 if (isTimerRunning) {
                     clearInterval(timerInterval);
+                    endSound.play();
                     startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
                 } else {
                     startSound.play();
