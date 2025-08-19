@@ -15,7 +15,7 @@
             height: 100vh;
             margin: 0;
             user-select: none;
-            overflow: hidden; /* Mantém a tela sem rolagem externa */
+            overflow: hidden;
         }
 
         .score-container {
@@ -229,15 +229,15 @@
             .score-box {
                 flex-basis: 45%;
                 margin: 5px;
-                height: 100px;
+                height: 120px; /* Altura ajustada para acomodar o texto */
             }
             
             .label {
-                font-size: 1.5em;
+                font-size: 1.2em; /* Fonte reduzida para caber no botão */
             }
 
             .score-value {
-                font-size: 3em;
+                font-size: 3em; /* Fonte ajustada para caber no botão */
             }
 
             .timer-container {
@@ -431,7 +431,7 @@
                 const player1Total = scoreElements.player1.total;
                 const player2Total = scoreElements.player2.total;
                 const player1Name = player1NameInput.value || player1NameInput.placeholder;
-                const player2Name = player2NameInput.value || player2NameInput.placeholder;
+                const player2Name = player2NameInput.value || player2NameNameInput.placeholder;
 
                 if (player1Total > player2Total) {
                     return `Campeão: ${player1Name}`;
