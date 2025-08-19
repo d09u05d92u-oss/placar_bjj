@@ -15,7 +15,7 @@
             height: 100vh;
             margin: 0;
             user-select: none;
-            overflow: hidden;
+            /* A rolagem agora é controlada pelo container */
         }
 
         .score-container {
@@ -23,10 +23,11 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             background-color: #000;
             padding: 10px;
             border-radius: 10px;
+            overflow-y: auto; /* Adiciona a rolagem vertical quando o conteúdo excede a tela */
         }
 
         .player-names {
@@ -35,7 +36,6 @@
             align-items: center;
             width: 100%;
             margin-bottom: 20px;
-            flex-wrap: wrap; /* Permite que os elementos se quebrem em telas pequenas */
         }
 
         .player-name {
@@ -74,7 +74,7 @@
             justify-content: space-between;
             margin-bottom: 10px;
             flex-grow: 1;
-            flex-wrap: wrap; /* Torna a linha responsiva */
+            flex-wrap: wrap;
         }
 
         .score-box {
@@ -131,7 +131,6 @@
             justify-content: center;
             width: 100%;
             margin: 20px 0;
-            flex-wrap: wrap; /* Torna o container do cronômetro responsivo */
         }
 
         .timer-display {
@@ -185,7 +184,7 @@
             height: 24px;
         }
 
-        /* Estilos específicos para telas menores (smartphones) */
+        /* Estilos para telas menores (smartphones) */
         @media (max-width: 768px) {
             .player-names {
                 flex-direction: column;
@@ -266,7 +265,7 @@
                     <span id="player2TotalPoints" class="score-value">0</span>
                 </div>
             </div>
-            <div class="score-box green" onclick="addPoints(1, 'points', 4)">
+            <div class="score-box green">
                 <div class="score-text">
                     <span id="player1TotalPoints" class="score-value">0</span>
                 </div>
