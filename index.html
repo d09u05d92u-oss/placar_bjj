@@ -31,10 +31,11 @@
 
         .player-names {
             display: flex;
-            justify-content: space-between; /* Mantém os inputs nos cantos */
-            align-items: center; /* Alinha a imagem verticalmente */
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Permite que os elementos se quebrem em telas pequenas */
         }
 
         .player-name {
@@ -53,14 +54,13 @@
             color: #aaa;
         }
         
-        /* Estilo para o container do GIF ajustado */
         .gif-container {
-            width: 50px; /* Define um tamanho pequeno para o container */
+            width: 50px;
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 10px; /* Adiciona um pequeno espaçamento */
+            margin: 0 10px;
         }
         
         .gif-container img {
@@ -74,6 +74,7 @@
             justify-content: space-between;
             margin-bottom: 10px;
             flex-grow: 1;
+            flex-wrap: wrap; /* Torna a linha responsiva */
         }
 
         .score-box {
@@ -89,24 +90,6 @@
             font-weight: bold;
             transition: transform 0.1s ease-in-out;
             position: relative;
-        }
-        
-        @media (max-width: 768px) {
-            .player-name {
-                font-size: 1.5em;
-            }
-            .score-box {
-                height: 120px;
-            }
-            .label {
-                font-size: 1.2em;
-            }
-            .score-value {
-                font-size: 3em;
-            }
-            .timer-display {
-                font-size: 3em;
-            }
         }
         
         .score-box:active {
@@ -148,6 +131,7 @@
             justify-content: center;
             width: 100%;
             margin: 20px 0;
+            flex-wrap: wrap; /* Torna o container do cronômetro responsivo */
         }
 
         .timer-display {
@@ -201,12 +185,52 @@
             height: 24px;
         }
 
-        /* Ícones Feathericons */
-        .feather-play, .feather-pause, .feather-rotate-ccw, .feather-plus, .feather-minus {
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        /* Estilos específicos para telas menores (smartphones) */
+        @media (max-width: 768px) {
+            .player-names {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .player-name {
+                width: 80%;
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+
+            .gif-container {
+                width: 40px;
+                height: 40px;
+                margin-top: 10px;
+                margin-bottom: 20px;
+            }
+
+            .score-row {
+                justify-content: center;
+            }
+
+            .score-box {
+                flex-basis: 45%; /* Ajusta o tamanho dos botões para 2 por linha */
+                margin: 5px;
+                height: 100px; /* Altura fixa para consistência */
+            }
+            
+            .label {
+                font-size: 1.5em;
+            }
+
+            .score-value {
+                font-size: 3em;
+            }
+
+            .timer-container {
+                flex-direction: column;
+            }
+
+            .timer-display {
+                font-size: 4em;
+                margin: 10px 0;
+            }
         }
     </style>
 </head>
