@@ -222,27 +222,22 @@
                 margin-bottom: 20px;
             }
 
-            /* Habilita rolagem horizontal para o placar */
             .score-row {
-                width: 100%;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                justify-content: flex-start;
-                min-width: 700px; /* Garante que os botões não encolham */
+                flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
             }
 
             .score-box {
-                flex-basis: 120px;
+                flex-basis: 48%; /* Ocupa 48% da largura para ter duas colunas */
                 height: 120px;
-                flex-shrink: 0;
+                margin: 1%;
             }
             
             .label {
-                font-size: 1.2em;
+                font-size: 1.5em; /* Reduzi o tamanho da fonte para mobile */
             }
 
             .score-value {
-                font-size: 3em;
+                font-size: 3em; /* Reduzi o tamanho da fonte para mobile */
             }
 
             .timer-container {
