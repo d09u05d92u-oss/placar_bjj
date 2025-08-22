@@ -117,6 +117,13 @@
             font-size: 6em;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
+        
+        .subtraction-label {
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 5px;
+        }
 
         /* Cores dos botões */
         .white { background-color: #fff; color: #000; }
@@ -124,6 +131,7 @@
         .yellow { background-color: #ffc107; color: #000; }
         .green { background-color: #4CAF50; color: #fff; }
         .blue { background-color: #1a4cd1; color: #fff; }
+        .dark-gray { background-color: #444; color: #fff; }
 
         .timer-container {
             display: flex;
@@ -223,21 +231,25 @@
             }
 
             .score-row {
-                flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
+                flex-wrap: wrap; 
             }
 
             .score-box {
-                flex-basis: 48%; /* Ocupa 48% da largura para ter duas colunas */
+                flex-basis: 48%; 
                 height: 120px;
                 margin: 1%;
             }
             
             .label {
-                font-size: 1.5em; /* Reduzi o tamanho da fonte para mobile */
+                font-size: 1.5em; 
             }
 
             .score-value {
-                font-size: 3em; /* Reduzi o tamanho da fonte para mobile */
+                font-size: 3em; 
+            }
+            
+            .subtraction-label {
+                font-size: 1.5em;
             }
 
             .timer-container {
@@ -293,21 +305,17 @@
                     <span id="player2TotalPoints" class="score-value">0</span>
                 </div>
             </div>
-            <div class="score-box green">
+        </div>
+
+        <div class="score-row">
+            <div class="score-box dark-gray" onclick="subtractPoints(2, 'penalty')">
                 <div class="score-text">
-                    <span id="player1TotalPoints" class="score-value">0</span>
+                    <span class="subtraction-label">-P</span>
                 </div>
             </div>
-            <div class="score-box yellow" onclick="addPoints(1, 'advantage')">
+            <div class="score-box dark-gray" onclick="subtractPoints(2, 'advantage')">
                 <div class="score-text">
-                    <span class="label">V</span>
-                    <span id="player1Advantage" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box red" onclick="addPoints(1, 'penalty')">
-                <div class="score-text">
-                    <span class="label">P</span>
-                    <span id="player1Penalty" class="score-value">0</span>
+                    <span class="subtraction-label">-V</span>
                 </div>
             </div>
         </div>
@@ -343,6 +351,60 @@
                     <span id="player2Points2" class="score-value">0</span>
                 </div>
             </div>
+        </div>
+
+        <div class="score-row">
+            <div class="score-box dark-gray" onclick="subtractPoints(2, 'points', 4)">
+                <div class="score-text">
+                    <span class="subtraction-label">-4</span>
+                </div>
+            </div>
+            <div class="score-box dark-gray" onclick="subtractPoints(2, 'points', 3)">
+                <div class="score-text">
+                    <span class="subtraction-label">-3</span>
+                </div>
+            </div>
+            <div class="score-box dark-gray" onclick="subtractPoints(2, 'points', 2)">
+                <div class="score-text">
+                    <span class="subtraction-label">-2</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-row">
+            <div class="score-box green">
+                <div class="score-text">
+                    <span id="player1TotalPoints" class="score-value">0</span>
+                </div>
+            </div>
+            <div class="score-box yellow" onclick="addPoints(1, 'advantage')">
+                <div class="score-text">
+                    <span class="label">V</span>
+                    <span id="player1Advantage" class="score-value">0</span>
+                </div>
+            </div>
+            <div class="score-box red" onclick="addPoints(1, 'penalty')">
+                <div class="score-text">
+                    <span class="label">P</span>
+                    <span id="player1Penalty" class="score-value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-row">
+            <div class="score-box dark-gray" onclick="subtractPoints(1, 'advantage')">
+                <div class="score-text">
+                    <span class="subtraction-label">-V</span>
+                </div>
+            </div>
+            <div class="score-box dark-gray" onclick="subtractPoints(1, 'penalty')">
+                <div class="score-text">
+                    <span class="subtraction-label">-P</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-row">
             <div class="score-box green" onclick="addPoints(1, 'points', 2)">
                 <div class="score-text">
                     <span class="label">2</span>
@@ -359,6 +421,24 @@
                 <div class="score-text">
                     <span class="label">4</span>
                     <span id="player1Points4" class="score-value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-row">
+            <div class="score-box dark-gray" onclick="subtractPoints(1, 'points', 2)">
+                <div class="score-text">
+                    <span class="subtraction-label">-2</span>
+                </div>
+            </div>
+            <div class="score-box dark-gray" onclick="subtractPoints(1, 'points', 3)">
+                <div class="score-text">
+                    <span class="subtraction-label">-3</span>
+                </div>
+            </div>
+            <div class="score-box dark-gray" onclick="subtractPoints(1, 'points', 4)">
+                <div class="score-text">
+                    <span class="subtraction-label">-4</span>
                 </div>
             </div>
         </div>
@@ -408,6 +488,21 @@
                     scoreElements[`player${player}`].points[`${value}`]++;
                 } else {
                     scoreElements[`player${player}`][type]++;
+                }
+                updateScoreDisplay();
+            };
+            
+            window.subtractPoints = (player, type, value = 1) => {
+                const playerKey = `player${player}`;
+                
+                if (type === 'points') {
+                    if (scoreElements[playerKey].points[value] > 0) {
+                        scoreElements[playerKey].points[value]--;
+                    }
+                } else {
+                    if (scoreElements[playerKey][type] > 0) {
+                        scoreElements[playerKey][type]--;
+                    }
                 }
                 updateScoreDisplay();
             };
