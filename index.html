@@ -1,503 +1,257 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Placar de Jiu-Jitsu Avançado</title>
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            user-select: none;
-            overflow: hidden;
-        }
-
-        .score-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            height: 100vh;
-            background-color: #000;
-            padding: 10px;
-            border-radius: 10px;
-            overflow-y: auto;
-        }
-
-        .player-names {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .player-name {
-            width: 45%;
-            background-color: #333;
-            border: none;
-            color: #fff;
-            text-align: center;
-            padding: 15px;
-            font-size: 2em;
-            border-radius: 5px;
-            text-transform: uppercase;
-        }
-
-        .player-name::placeholder {
-            color: #aaa;
-        }
-        
-        .gif-container {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0 10px;
-        }
-        
-        .gif-container img {
-            width: 100%;
-            height: auto;
-        }
-
-        .score-row {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            flex-grow: 1;
-            flex-wrap: wrap;
-        }
-
-        .score-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 1;
-            margin: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: bold;
-            transition: transform 0.1s ease-in-out;
-            position: relative;
-        }
-        
-        .score-box:active {
-            transform: scale(0.95);
-        }
-        
-        .score-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            line-height: 1;
-        }
-
-        .label {
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .score-value {
-            font-size: 6em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Cores dos botões */
-        .white { background-color: #fff; color: #000; }
-        .red { background-color: #d11a1a; color: #fff; }
-        .yellow { background-color: #ffc107; color: #000; }
-        .green { background-color: #4CAF50; color: #fff; }
-        .blue { background-color: #1a4cd1; color: #fff; }
-
-        .timer-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        .timer-display {
-            font-size: 7em;
-            color: #d11a1a;
-            font-family: 'Digital-7', sans-serif;
-            margin: 0 20px;
-            min-width: 200px;
-            text-align: center;
-        }
-        
-        .timer-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .timer-controls button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #fff;
-            font-size: 1.5em;
-            padding: 5px;
-        }
-        
-        .timer-buttons {
-            display: flex;
-            justify-content: space-between;
-            width: 100px;
-        }
-
-        .timer-buttons button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-        
-        #resetTimer {
-            color: #fff;
-        }
-        
-        #startStopTimer {
-            color: #fff;
-        }
-
-        .timer-buttons svg {
-            fill: currentColor;
-            width: 24px;
-            height: 24px;
-        }
-        
-        /* Mensagem de rotação para mobile */
-        .orientation-message {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 100vh;
-            color: #fff;
-            padding: 20px;
-        }
-        
-        .orientation-message svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 20px;
-        }
-
-        /* Estilos para telas menores (smartphones) */
-        @media (max-width: 768px) {
-            .player-names {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .player-name {
-                width: 80%;
-                font-size: 1.5em;
-                margin-bottom: 10px;
-            }
-
-            .gif-container {
-                width: 40px;
-                height: 40px;
-                margin-top: 10px;
-                margin-bottom: 20px;
-            }
-
-            .score-row {
-                flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
-            }
-
-            .score-box {
-                flex-basis: 48%; /* Ocupa 48% da largura para ter duas colunas */
-                height: 120px;
-                margin: 1%;
-            }
-            
-            .label {
-                font-size: 1.5em; /* Reduzi o tamanho da fonte para mobile */
-            }
-
-            .score-value {
-                font-size: 3em; /* Reduzi o tamanho da fonte para mobile */
-            }
-
-            .timer-container {
-                flex-direction: column;
-            }
-
-            .timer-display {
-                font-size: 4em;
-                margin: 10px 0;
-            }
-        }
-        
-        /* Esconde o placar e mostra a mensagem em modo retrato */
-        @media (orientation: portrait) {
-            .score-container {
-                display: none;
-            }
-            .orientation-message {
-                display: flex;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placar de Jiu-Jitsu Avançado</title>
+  <style>
+    /* --- estilos originais mantidos --- */
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      user-select: none;
+      overflow: hidden;
+    }
+    .score-container { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; background-color: #000; padding: 10px; border-radius: 10px; }
+    .player-names { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; }
+    .player-name { width: 45%; background-color: #333; border: none; color: #fff; text-align: center; padding: 15px; font-size: 2em; border-radius: 5px; text-transform: uppercase; }
+    .player-name::placeholder { color: #aaa; }
+    .gif-container { width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; margin: 0 10px; }
+    .gif-container img { width: 100%; height: auto; }
+    .score-row { display: flex; width: 100%; justify-content: space-between; margin-bottom: 10px; flex-grow: 1; flex-wrap: wrap; }
+    .score-box { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; margin: 5px; border-radius: 5px; cursor: pointer; text-align: center; font-weight: bold; transition: transform 0.1s ease-in-out; position: relative; }
+    .score-box:active { transform: scale(0.95); }
+    .score-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; }
+    .label { font-size: 2.5em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+    .score-value { font-size: 6em; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); }
+    .white { background-color: #fff; color: #000; }
+    .red { background-color: #d11a1a; color: #fff; }
+    .yellow { background-color: #ffc107; color: #000; }
+    .green { background-color: #4CAF50; color: #fff; }
+    .blue { background-color: #1a4cd1; color: #fff; }
+    .timer-container { display: flex; align-items: center; justify-content: center; width: 100%; margin: 20px 0; }
+    .timer-display { font-size: 7em; color: #d11a1a; font-family: 'Digital-7', sans-serif; margin: 0 20px; min-width: 200px; text-align: center; }
+    .timer-controls { display: flex; flex-direction: column; align-items: center; }
+    .timer-controls button { background: none; border: none; cursor: pointer; color: #fff; font-size: 1.5em; padding: 5px; }
+    .timer-buttons { display: flex; justify-content: space-between; width: 100px; }
+    .timer-buttons button { background: none; border: none; cursor: pointer; padding: 10px; }
+    #resetTimer { color: #fff; }
+    #startStopTimer { color: #fff; }
+    .timer-buttons svg { fill: currentColor; width: 24px; height: 24px; }
+    .total { pointer-events: none; } /* bloqueia clique nos totais */
+    @media (max-width: 768px) {
+      .player-names { flex-direction: column; align-items: center; }
+      .player-name { width: 80%; font-size: 1.5em; margin-bottom: 10px; }
+      .gif-container { width: 40px; height: 40px; margin-top: 10px; margin-bottom: 20px; }
+      .score-row { justify-content: center; }
+      .score-box { flex-basis: 45%; margin: 5px; height: 100px; }
+      .label { font-size: 1.5em; }
+      .score-value { font-size: 3em; }
+      .timer-container { flex-direction: column; }
+      .timer-display { font-size: 4em; margin: 10px 0; }
+    }
+  </style>
 </head>
 <body>
+  <audio id="startSound" src="https://www.myinstants.com/media/sounds/apito_2.mp3"></audio>
+  <audio id="endSound" src="https://www.myinstants.com/media/sounds/apito_3.mp3"></audio>
 
-    <audio id="startSound" src="https://www.myinstants.com/media/sounds/apito_2.mp3"></audio>
-    <audio id="endSound" src="https://www.myinstants.com/media/sounds/apito_3.mp3"></audio>
-
-    <div class="score-container">
-        <div class="player-names">
-            <input type="text" id="player2Name" placeholder="Player 2" class="player-name">
-            <div class="gif-container">
-                <img src="https://res.cloudinary.com/ddozlstmp/image/upload/v1755625626/lv_0_20250819144633_yun7o2.gif" alt="Placar GIF">
-            </div>
-            <input type="text" id="player1Name" placeholder="Player 1" class="player-name">
-        </div>
-
-        <div class="score-row">
-            <div class="score-box red" onclick="addPoints(2, 'penalty')">
-                <div class="score-text">
-                    <span class="label">P</span>
-                    <span id="player2Penalty" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box yellow" onclick="addPoints(2, 'advantage')">
-                <div class="score-text">
-                    <span class="label">V</span>
-                    <span id="player2Advantage" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box white">
-                <div class="score-text">
-                    <span id="player2TotalPoints" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box green">
-                <div class="score-text">
-                    <span id="player1TotalPoints" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box yellow" onclick="addPoints(1, 'advantage')">
-                <div class="score-text">
-                    <span class="label">V</span>
-                    <span id="player1Advantage" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box red" onclick="addPoints(1, 'penalty')">
-                <div class="score-text">
-                    <span class="label">P</span>
-                    <span id="player1Penalty" class="score-value">0</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="timer-container">
-            <div class="timer-controls">
-                <button id="addMinute"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-                <button id="subtractMinute"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
-            </div>
-            <div id="timer" class="timer-display">5:00</div>
-            <div class="timer-buttons">
-                <button id="resetTimer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 8.5L16 3l-5.5 5.5"/><path d="M16 16.5V3h-2.5a6 6 0 0 0-6 6v.5"/><path d="M2.5 15.5L8 21l5.5-5.5"/><path d="M8 7.5v13.5h2.5a6 6 0 0 0 6-6v-.5"/></svg></button>
-                <button id="startStopTimer"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button>
-            </div>
-        </div>
-
-        <div class="score-row">
-            <div class="score-box white" onclick="addPoints(2, 'points', 4)">
-                <div class="score-text">
-                    <span class="label">4</span>
-                    <span id="player2Points4" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box white" onclick="addPoints(2, 'points', 3)">
-                <div class="score-text">
-                    <span class="label">3</span>
-                    <span id="player2Points3" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box white" onclick="addPoints(2, 'points', 2)">
-                <div class="score-text">
-                    <span class="label">2</span>
-                    <span id="player2Points2" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box green" onclick="addPoints(1, 'points', 2)">
-                <div class="score-text">
-                    <span class="label">2</span>
-                    <span id="player1Points2" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box green" onclick="addPoints(1, 'points', 3)">
-                <div class="score-text">
-                    <span class="label">3</span>
-                    <span id="player1Points3" class="score-value">0</span>
-                </div>
-            </div>
-            <div class="score-box green" onclick="addPoints(1, 'points', 4)">
-                <div class="score-text">
-                    <span class="label">4</span>
-                    <span id="player1Points4" class="score-value">0</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="orientation-message">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21a9 9 0 1 0-9-9c0 1.25.3 2.45.85 3.52L6 12l-3.15 6.13a.5.5 0 0 0 .54.67L6.8 12.55 12 21z"/></svg>
-        <p>Por favor, gire seu dispositivo para a posição horizontal.</p>
+  <div class="score-container">
+    <div class="player-names">
+      <input type="text" id="player2Name" placeholder="Player 2" class="player-name">
+      <div class="gif-container">
+        <img src="https://res.cloudinary.com/ddozlstmp/image/upload/v1755625626/lv_0_20250819144633_yun7o2.gif" alt="Placar GIF">
+      </div>
+      <input type="text" id="player1Name" placeholder="Player 1" class="player-name">
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const player1NameInput = document.getElementById('player1Name');
-            const player2NameInput = document.getElementById('player2Name');
-            const startSound = document.getElementById('startSound');
-            const endSound = document.getElementById('endSound');
+    <!-- Placar -->
+    <div class="score-row">
+      <div class="score-box red" onclick="addPoints(2, 'penalty')">
+        <div class="score-text"><span class="label">P</span><span id="player2Penalty" class="score-value">0</span></div>
+      </div>
+      <div class="score-box yellow" onclick="addPoints(2, 'advantage')">
+        <div class="score-text"><span class="label">V</span><span id="player2Advantage" class="score-value">0</span></div>
+      </div>
+      <div class="score-box white total"><div class="score-text"><span id="player2TotalPoints" class="score-value">0</span></div></div>
+      <div class="score-box green total"><div class="score-text"><span id="player1TotalPoints" class="score-value">0</span></div></div>
+      <div class="score-box yellow" onclick="addPoints(1, 'advantage')">
+        <div class="score-text"><span class="label">V</span><span id="player1Advantage" class="score-value">0</span></div>
+      </div>
+      <div class="score-box red" onclick="addPoints(1, 'penalty')">
+        <div class="score-text"><span class="label">P</span><span id="player1Penalty" class="score-value">0</span></div>
+      </div>
+    </div>
 
-            const scoreElements = {
-                player1: { points: { 2: 0, 3: 0, 4: 0 }, advantage: 0, penalty: 0, total: 0 },
-                player2: { points: { 2: 0, 3: 0, 4: 0 }, advantage: 0, penalty: 0, total: 0 }
-            };
+    <!-- Timer -->
+    <div class="timer-container">
+      <div class="timer-controls">
+        <button id="addMinute">+</button>
+        <button id="subtractMinute">-</button>
+      </div>
+      <div id="timer" class="timer-display">5:00</div>
+      <div class="timer-buttons">
+        <button id="resetTimer">R</button>
+        <button id="startStopTimer">▶</button>
+      </div>
+    </div>
 
-            function updateScoreDisplay() {
-                document.getElementById('player1Advantage').textContent = scoreElements.player1.advantage;
-                document.getElementById('player1Penalty').textContent = scoreElements.player1.penalty;
-                document.getElementById('player2Advantage').textContent = scoreElements.player2.advantage;
-                document.getElementById('player2Penalty').textContent = scoreElements.player2.penalty;
-                
-                document.getElementById('player1Points2').textContent = scoreElements.player1.points['2'];
-                document.getElementById('player1Points3').textContent = scoreElements.player1.points['3'];
-                document.getElementById('player1Points4').textContent = scoreElements.player1.points['4'];
-                document.getElementById('player2Points2').textContent = scoreElements.player2.points['2'];
-                document.getElementById('player2Points3').textContent = scoreElements.player2.points['3'];
-                document.getElementById('player2Points4').textContent = scoreElements.player2.points['4'];
+    <!-- Botões de pontos -->
+    <div class="score-row">
+      <div class="score-box white" onclick="addPoints(2, 'points', 4)">
+        <div class="score-text"><span class="label">4</span><span id="player2Points4" class="score-value">0</span></div>
+      </div>
+      <div class="score-box white" onclick="addPoints(2, 'points', 3)">
+        <div class="score-text"><span class="label">3</span><span id="player2Points3" class="score-value">0</span></div>
+      </div>
+      <div class="score-box white" onclick="addPoints(2, 'points', 2)">
+        <div class="score-text"><span class="label">2</span><span id="player2Points2" class="score-value">0</span></div>
+      </div>
+      <div class="score-box green" onclick="addPoints(1, 'points', 2)">
+        <div class="score-text"><span class="label">2</span><span id="player1Points2" class="score-value">0</span></div>
+      </div>
+      <div class="score-box green" onclick="addPoints(1, 'points', 3)">
+        <div class="score-text"><span class="label">3</span><span id="player1Points3" class="score-value">0</span></div>
+      </div>
+      <div class="score-box green" onclick="addPoints(1, 'points', 4)">
+        <div class="score-text"><span class="label">4</span><span id="player1Points4" class="score-value">0</span></div>
+      </div>
+    </div>
+  </div>
 
-                scoreElements.player1.total = (scoreElements.player1.points['2'] * 2) + (scoreElements.player1.points['3'] * 3) + (scoreElements.player1.points['4'] * 4);
-                scoreElements.player2.total = (scoreElements.player2.points['2'] * 2) + (scoreElements.player2.points['3'] * 3) + (scoreElements.player2.points['4'] * 4);
-                
-                document.getElementById('player1TotalPoints').textContent = scoreElements.player1.total;
-                document.getElementById('player2TotalPoints').textContent = scoreElements.player2.total;
-            }
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scoreElements = {
+        player1: { points: {2:0,3:0,4:0}, advantage:0, penalty:0, total:0 },
+        player2: { points: {2:0,3:0,4:0}, advantage:0, penalty:0, total:0 }
+      };
 
-            window.addPoints = (player, type, value = 1) => {
-                const playerKey = `player${player}`;
-                
-                if (type === 'points') {
-                    scoreElements[`player${player}`].points[`${value}`]++;
-                } else {
-                    scoreElements[`player${player}`][type]++;
-                }
-                updateScoreDisplay();
-            };
+      function updateScoreDisplay() {
+        document.getElementById('player1Advantage').textContent = scoreElements.player1.advantage;
+        document.getElementById('player1Penalty').textContent = scoreElements.player1.penalty;
+        document.getElementById('player2Advantage').textContent = scoreElements.player2.advantage;
+        document.getElementById('player2Penalty').textContent = scoreElements.player2.penalty;
 
-            const timerDisplay = document.getElementById('timer');
-            const startStopButton = document.getElementById('startStopTimer');
-            const resetButton = document.getElementById('resetTimer');
-            const addMinuteButton = document.getElementById('addMinute');
-            const subtractMinuteButton = document.getElementById('subtractMinute');
-            let timerInterval;
-            let isTimerRunning = false;
-            let timeInSeconds = 300;
+        document.getElementById('player1Points2').textContent = scoreElements.player1.points[2];
+        document.getElementById('player1Points3').textContent = scoreElements.player1.points[3];
+        document.getElementById('player1Points4').textContent = scoreElements.player1.points[4];
+        document.getElementById('player2Points2').textContent = scoreElements.player2.points[2];
+        document.getElementById('player2Points3').textContent = scoreElements.player2.points[3];
+        document.getElementById('player2Points4').textContent = scoreElements.player2.points[4];
 
-            function formatTime(seconds) {
-                const minutes = Math.floor(seconds / 60);
-                const remainingSeconds = seconds % 60;
-                return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-            }
+        scoreElements.player1.total = (scoreElements.player1.points[2]*2)+(scoreElements.player1.points[3]*3)+(scoreElements.player1.points[4]*4);
+        scoreElements.player2.total = (scoreElements.player2.points[2]*2)+(scoreElements.player2.points[3]*3)+(scoreElements.player2.points[4]*4);
 
-            function determineWinner() {
-                const player1Total = scoreElements.player1.total;
-                const player2Total = scoreElements.player2.total;
-                const player1Name = player1NameInput.value || player1NameInput.placeholder;
-                const player2Name = player2NameInput.value || player2NameInput.placeholder;
+        document.getElementById('player1TotalPoints').textContent = scoreElements.player1.total;
+        document.getElementById('player2TotalPoints').textContent = scoreElements.player2.total;
+      }
 
-                if (player1Total > player2Total) {
-                    return `Campeão: ${player1Name}`;
-                } else if (player2Total > player1Total) {
-                    return `Campeão: ${player2Name}`;
-                } else {
-                    return "A luta terminou em empate!";
-                }
-            }
-            
-            addMinuteButton.addEventListener('click', () => {
-                timeInSeconds += 60;
-                timerDisplay.textContent = formatTime(timeInSeconds);
-            });
+      window.addPoints = (player, type, value=1, subtract=false) => {
+        const p = player===1 ? "player1" : "player2";
+        if(type==="points") {
+          if(subtract && scoreElements[p].points[value]>0) scoreElements[p].points[value]--;
+          else if(!subtract) scoreElements[p].points[value]++;
+        } else {
+          if(subtract && scoreElements[p][type]>0) scoreElements[p][type]--;
+          else if(!subtract) scoreElements[p][type]++;
+        }
+        updateScoreDisplay();
+      };
 
-            subtractMinuteButton.addEventListener('click', () => {
-                if (timeInSeconds >= 60) {
-                    timeInSeconds -= 60;
-                } else {
-                    timeInSeconds = 0;
-                }
-                timerDisplay.textContent = formatTime(timeInSeconds);
-            });
-
-            startStopButton.addEventListener('click', () => {
-                if (isTimerRunning) {
-                    clearInterval(timerInterval);
-                    endSound.play();
-                    startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
-                } else {
-                    startSound.play();
-                    timerInterval = setInterval(() => {
-                        if (timeInSeconds > 0) {
-                            timeInSeconds--;
-                            timerDisplay.textContent = formatTime(timeInSeconds);
-                        } else {
-                            clearInterval(timerInterval);
-                            isTimerRunning = false;
-                            endSound.play();
-                            startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
-                            setTimeout(() => alert(determineWinner()), 500);
-                        }
-                    }, 1000);
-                    startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>`;
-                }
-                isTimerRunning = !isTimerRunning;
-            });
-
-            resetButton.addEventListener('click', () => {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                timeInSeconds = 300;
-                timerDisplay.textContent = formatTime(timeInSeconds);
-                startStopButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>`;
-
-                for (let player in scoreElements) {
-                    scoreElements[`${player}`].advantage = 0;
-                    scoreElements[`${player}`].penalty = 0;
-                    scoreElements[`${player}`].points = { '2': 0, '3': 0, '4': 0 };
-                    scoreElements[`${player}`].total = 0;
-                }
-                updateScoreDisplay();
-            });
-
-            updateScoreDisplay();
+      // clique direito para diminuir
+      document.querySelectorAll('.score-box:not(.total)').forEach(box=>{
+        box.addEventListener('contextmenu',e=>{
+          e.preventDefault();
+          const attr = box.getAttribute('onclick');
+          if(attr){
+            const args = attr.match(/addPoints\((.*?)\)/)[1].split(',').map(a=>a.trim());
+            const player = parseInt(args[0]);
+            const type = args[1].replace(/['"]/g,'');
+            const value = args[2] ? parseInt(args[2]) : 1;
+            addPoints(player, type, value, true);
+          }
         });
-    </script>
+      });
+
+      updateScoreDisplay();
+
+      // ---- TIMER ----
+      let timerDisplay = document.getElementById("timer");
+      let startStopBtn = document.getElementById("startStopTimer");
+      let resetBtn = document.getElementById("resetTimer");
+      let addMinuteBtn = document.getElementById("addMinute");
+      let subtractMinuteBtn = document.getElementById("subtractMinute");
+
+      let timerDuration = 300; // 5 min em segundos
+      let remainingTime = timerDuration;
+      let timerInterval = null;
+      let running = false;
+
+      function renderTime() {
+        let minutes = Math.floor(remainingTime / 60);
+        let seconds = remainingTime % 60;
+        timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2,"0")}`;
+      }
+
+      function startTimer() {
+        if (running) return;
+        running = true;
+        document.getElementById("startSound").play();
+        startStopBtn.textContent = "⏸";
+        timerInterval = setInterval(()=>{
+          if (remainingTime > 0) {
+            remainingTime--;
+            renderTime();
+          } else {
+            clearInterval(timerInterval);
+            running = false;
+            document.getElementById("endSound").play();
+            startStopBtn.textContent = "▶";
+          }
+        },1000);
+      }
+
+      function stopTimer() {
+        running = false;
+        clearInterval(timerInterval);
+        startStopBtn.textContent = "▶";
+      }
+
+      function resetTimer() {
+        stopTimer();
+        remainingTime = timerDuration;
+        renderTime();
+      }
+
+      startStopBtn.addEventListener("click", ()=>{
+        if(running) stopTimer();
+        else startTimer();
+      });
+
+      resetBtn.addEventListener("click", resetTimer);
+
+      addMinuteBtn.addEventListener("click", ()=>{
+        remainingTime += 60;
+        timerDuration = remainingTime;
+        renderTime();
+      });
+
+      subtractMinuteBtn.addEventListener("click", ()=>{
+        if(remainingTime > 60) {
+          remainingTime -= 60;
+          timerDuration = remainingTime;
+          renderTime();
+        }
+      });
+
+      renderTime();
+    });
+  </script>
 </body>
 </html>
