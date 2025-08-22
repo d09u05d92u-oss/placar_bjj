@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Placar de Jiu-Jitsu Avançado</title>
   <style>
-    /* --- estilos originais mantidos --- */
     body {
       background-color: #000;
       color: #fff;
@@ -44,7 +43,7 @@
     #resetTimer { color: #fff; }
     #startStopTimer { color: #fff; }
     .timer-buttons svg { fill: currentColor; width: 24px; height: 24px; }
-    .total { pointer-events: none; } /* bloqueia clique nos totais */
+    .total { pointer-events: none; cursor: default; } /* bloqueia clique nos totais */
     @media (max-width: 768px) {
       .player-names { flex-direction: column; align-items: center; }
       .player-name { width: 80%; font-size: 1.5em; margin-bottom: 10px; }
@@ -188,7 +187,7 @@
       let addMinuteBtn = document.getElementById("addMinute");
       let subtractMinuteBtn = document.getElementById("subtractMinute");
 
-      let defaultDuration = 300; // 5 min padrão
+      let defaultDuration = 300; // 5 min em segundos
       let remainingTime = defaultDuration;
       let timerInterval = null;
       let running = false;
@@ -202,7 +201,7 @@
       function startTimer() {
         if (running) return;
         running = true;
-        document.getElementById("startSound").play().catch(()=>{});
+        document.getElementById("startSound").play();
         startStopBtn.textContent = "⏸";
         timerInterval = setInterval(()=>{
           if (remainingTime > 0) {
@@ -211,7 +210,7 @@
           } else {
             clearInterval(timerInterval);
             running = false;
-            document.getElementById("endSound").play().catch(()=>{});
+            document.getElementById("endSound").play();
             startStopBtn.textContent = "▶";
           }
         },1000);
@@ -220,7 +219,6 @@
       function stopTimer() {
         running = false;
         clearInterval(timerInterval);
-        timerInterval = null;
         startStopBtn.textContent = "▶";
       }
 
@@ -228,6 +226,10 @@
         stopTimer();
         remainingTime = defaultDuration;
         renderTime();
+        // zerar todos os pontos
+        scoreElements.player1 = { points: {2:0,3:0,4:0}, advantage:0, penalty:0, total:0 };
+        scoreElements.player2 = { points: {2:0,3:0,4:0}, advantage:0, penalty:0, total:0 };
+        updateScoreDisplay();
       }
 
       startStopBtn.addEventListener("click", ()=>{
@@ -239,12 +241,14 @@
 
       addMinuteBtn.addEventListener("click", ()=>{
         remainingTime += 60;
+        defaultDuration = remainingTime;
         renderTime();
       });
 
       subtractMinuteBtn.addEventListener("click", ()=>{
         if(remainingTime > 60) {
           remainingTime -= 60;
+          defaultDuration = remainingTime;
           renderTime();
         }
       });
